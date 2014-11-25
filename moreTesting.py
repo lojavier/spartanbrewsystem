@@ -1,7 +1,6 @@
 # Blonde Brewing Sample Program?
 
 # Initialization
-# Set up appropriate GPIOs (Heater, Cooling, Solenoid)
 def initialize(GPIOpin):
     GPIO.setup(GPIOpin, GPIO.OUT)
     GPIO.output(GPIOpin, GPIO.HIGH)
@@ -10,6 +9,9 @@ import RPi.GPIO as GPIO
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
+MAX = 99
+
+# Set up appropriate GPIOs (Heater, Cooling, Solenoid)
 heater = 13
 cooling = 6
 solenoid = 5
@@ -32,47 +34,73 @@ def printInstruction(instruction):
 # This function heats the liquid.
 # Input Parameters: Temperature you want to reach, and time?
 # This function will check temperature, time, activate gpio when appropriate.
-def heatControl():
-        print("HEAT!")
+def heatControl(goalTime, goalTemperature):
+    print("Beginning Heating Stage")
+    #currentTemperature = get currentTemperature
+    #while (currentTemperature < goalTemperature):
+    GPIO.output(heater, GPIO.LOW) #Active Low Relay
+
+    # Upon reaching appropriate temperature
+    # Check to see if you have to maintain boil or can leave immediately
+    #if (goalTime != MAX):
+        #if(goalTime > 0):
+            #print("Placeholder")
+            #decrement goalTime
+            #Leave Heater on because max temp is ~212
+
+    
+    #Temperature Reached
+    time.sleep(5)
+    GPIO.output(heater, GPIO.HIGH) #Re-Activates Relay
+    print("Heating Done!")
 
 # This function cools the liquid.
 # Input Parameter: Temperature you want to reach, time limit?
 # This function will check temperature, time, activate gpio when appropriate.
-def coolingControl():
-        print("COOL!")
+def coolingControl(goalTime, goalTemperature):
+    print("Beginning Cooling Stage")
+    #currentTemperature = get currentTemperature
+    #while (currentTemperature >= goalTemperature):
+    GPIO.output(cooling, GPIO.LOW) #Activates Cooler
 
+    time.sleep(5)
+    GPIO.output(cooling, GPIO.HIGH) #Re-activates Relay
+    print("Cooling Done")
+
+# This functions disperses the liquid
+# Input Parameter: time //total time to release liquid. Take upper estimate.
+def solenoidControl(goalTime):
+    print("Beginning Dispersal")
+    #while(goalTime > 0):
+    GPIO.output(solenoid, GPIO.LOW) #Activates Solenoid
+        #decrement time
+
+    time.sleep(5)
+    GPIO.output(solenoid, GPIO.HIGH) #Re-Activates Relay
+    print("Finished Dispersal")
 
 print("Sanitize your equipment and Fermentation Vessel!")
 
+# Add Water
 printInstruction('6 gallons of water')
 
 print("You added water!")
 
-# Parameters are time and temperature
 # Bring Water to Boil
-# Heater On (GPIO = LOW)
-# Boiling Temperature reached
-# Heater Off (GPIO = HIGH)
+# Parameters are time(s) and temperature(F)
+heatControl(MAX, 210) # Unlimited Time to bring to boil
 
 # Add Rice Extract
 printInstruction("Rice Extract")
 
 # Bring Water Back to Boil
-# Heater On (GPIO = LOW)
-# Boiling Temperature reached
-# Heater Off (GPIO = HIGH)
+heatControl(MAX, 210) # Unlimited Time to bring to boil
 
 # Add Willamette hops
 printInstruction("Willamette hops")
 
 # Bring Water Back to Boil
-# Heater On (GPIO = LOW)
-# if (temperature < 205)
-#   Heater On
-# if (temperature > 208)
-#   Heater Off
-# Repeat until 20 minutes have passed
-# Heater Off (GPIO = HIGH)
+heatControl(20, 210) # Bring to Boil, then boil for 20 minutes
 
 # Add LME
 printInstruction("Light Malt Extract")
@@ -81,13 +109,7 @@ printInstruction("Light Malt Extract")
 printInstruction("Whirfloc Tablet")
 
 # Bring Water Back to Boil
-# Heater On (GPIO = LOW)
-# if (temperature < 205)
-#   Heater On
-# if (temperature > 208)
-#   Heater Off
-# Repeat until 10 minutes have passed
-# Heater Off (GPIO = HIGH)
+heatControl (10, 210)
 
 # Remove Hops
 print("Remove hops bag now.")
@@ -98,14 +120,12 @@ while acknowledgement != 'y':
     acknowledgement = raw_input("Did you remove the hops bag? (y/n) ")
 
 # Chilling Phase
-# Pump On (GPIO = LOW)
-# Until Temperature < 90F or
-#   if 30 minutes have passed and temperature < 100F
-# Pump Off (GPIO = HIGH)
+coolingControl(MAX, 90)
 
-# Solenoid On (GPIO = LOW)
+#Dispersal Phase
+solenoidControl(MAX)
 # 3-4 minutes have passed (assuming kettle is emptied)
-# Solenoid Off (GPIO = HIGH)
+
 
 print("Add Yeast")
 
