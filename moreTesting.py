@@ -63,7 +63,7 @@ def coolingControl(goalTime, goalTemperature):
     #while (currentTemperature >= goalTemperature):
     GPIO.output(cooling, GPIO.LOW) #Activates Cooler
 
-    time.sleep(5)
+    time.sleep(15)
     GPIO.output(cooling, GPIO.HIGH) #Re-activates Relay
     print("Cooling Done")
 
@@ -75,7 +75,7 @@ def solenoidControl(goalTime):
     GPIO.output(solenoid, GPIO.LOW) #Activates Solenoid
         #decrement time
 
-    time.sleep(5)
+    time.sleep(15)
     GPIO.output(solenoid, GPIO.HIGH) #Re-Activates Relay
     print("Finished Dispersal")
 
