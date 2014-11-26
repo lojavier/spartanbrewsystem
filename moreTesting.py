@@ -29,7 +29,7 @@ def printInstruction(instruction):
     acknowledgement = raw_input("Did you add {}? (y/n) " .format(instruction))
     # update flag on database
     while acknowledgement != 'y':
-        acknowledgement = raw_input("Did you add the {}? (y/n) " .format(instruction))
+        acknowledgement = raw_input("Did you add {}? (y/n) " .format(instruction))
 
 # This function heats the liquid.
 # Input Parameters: Temperature you want to reach, and time?
@@ -103,10 +103,10 @@ printInstruction("Willamette hops")
 heatControl(20, 210) # Bring to Boil, then boil for 20 minutes
 
 # Add LME
-printInstruction("Light Malt Extract")
+printInstruction("Malt Extract")
 
 # Add Whirlfloc
-printInstruction("Whirfloc Tablet")
+printInstruction("Whirlfloc Tablet")
 
 # Bring Water Back to Boil
 heatControl (10, 210)
